@@ -327,9 +327,7 @@ elif nav == 'Forecast':
     except Exception as e:
         st.error(f"An error occurred during forecasting: {e}")
     
-    # ========== INSIGHT PLACEHOLDERS ==========
-st.markdown("---\n### 🔍 Summary Insights")
-st.markdown("---\n### 🔍 Summary Insights")
+    # ========== INSIGHTS ==========
 
 if not filtered_df.empty and filtered_df['Street'].dropna().size > 0:
     street_counts = filtered_df['Street'].value_counts()
