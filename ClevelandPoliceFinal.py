@@ -11,42 +11,6 @@ import streamlit.components.v1 as components
 # Data Loading
 #----------------
 
-directory_path = '/Users/htetsu/Desktop/TS/Cleveland Police/'
-all_files = os.listdir(directory_path)
-csv_files = [f for f in all_files if f.endswith('.csv')]
-
-
-# Create an empty list to store DataFrames
-dfs = []
-
-# Read each CSV file into a DataFrame and append it to the list
-for csv_file in csv_files:
-    file_path = os.path.join(directory_path, csv_file)
-    try:
-        df = pd.read_csv(file_path)
-        dfs.append(df)
-    except Exception as e:
-        print(f"Error reading {csv_file}: {e}")
-
-
-# Concatenate all DataFrames into a single DataFrame
-combined_df = pd.concat(dfs, ignore_index=True)
-
-# Display the first and last few rows of the combined DataFrame
-print(combined_df.head())
-print(combined_df.tail())
-
-# Define the path for the new combined CSV file
-output_csv_path = os.path.join(directory_path, 'combined_data.csv')
-
-# Save the combined DataFrame to a new CSV file
-try:
-    combined_df.to_csv(output_csv_path, index=False)
-    print(f"Combined data saved successfully to {output_csv_path}")
-except Exception as e:
-    print(f"Error saving combined data to CSV: {e}")
-    
-    
 # Load the saved file, renamed and converted to xlsx 
 df_clean = pd.read_csv('/Users/htetsu/Desktop/TS/Cleveland Police/cleveland_final.csv')
 
