@@ -168,12 +168,12 @@ if nav == 'Overview':
     """, unsafe_allow_html=True)
 
     with col_b:
-    top_street = filtered_df['Street'].mode().iloc[0] if not filtered_df['Street'].isna().all() else "N/A"
-    st.markdown(f"""
-    <div style="{card_style}">
-        <h6>Most Frequent Crime Spot</h6>
-        <div style="color:#004085; font-size: 16px; font-weight: 600; word-wrap: break-word;">{top_street}</div>
-    </div>
+        top_street = filtered_df['Street'].mode().iloc[0] if not filtered_df['Street'].isna().all() else "N/A"
+        st.markdown(f"""
+        <div style="{card_style}">
+            <h6>Most Frequent Crime Spot</h6>
+            <div style="color:#004085; font-size: 16px; font-weight: 600; word-wrap: break-word;">{top_street}</div>
+        </div>
     """, unsafe_allow_html=True)
 
     with col_c:
