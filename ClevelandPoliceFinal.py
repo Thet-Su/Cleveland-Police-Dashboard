@@ -329,10 +329,39 @@ elif nav == 'Forecast':
     
     # ========== INSIGHT PLACEHOLDERS ==========
 st.markdown("---\n### 🔍 Summary Insights")
-st.info("""**Street Hotspots:** Carlton Avenue & Stockton area top the crime count.
+st.markdown("---\n### 🔍 Summary Insights")
 
-**Seasonality:** July–August show visible spikes. Investigate why.
+if not filtered_df.empty and filtered_df['Street'].dropna().size > 0:
+    street_counts = filtered_df['Street'].value_counts()
+    top_street = street_counts.idxmax()
+else:
+    top_street = "N/A"
 
-**Type Dominance:** 'Violence and sexual offences' remain most frequent crime type each year.""")
+# Top Crime Type
+if not filtered_df.empty and filtered_df['Crime type'].dropna().size > 0:
+    crime_counts = filtered_df['Crime type'].value_counts()
+    top_crime_type = crime_counts.idxmax()
+else:
+    top_crime_type = "N/A"
 
+# Seasonality
+if not filtered_df.empty:
+    seasonality_df = filtered_df.copy()
+    seasonality_df['Month_Name'] = seasonality_df['Month'].dt.strftime('%B')
+    month_order = ['January', 'February', 'March', 'April', 'May', 'June',
+                   'July', 'August', 'September', 'October', 'November', 'December']
+    seasonal_counts = seasonality_df['Month_Name'].value_counts().reindex(month_order).dropna()
+    top_months = seasonal_counts.nlargest(2).index.tolist()
+    seasonality_insight = f"{top_months[0]} and {top_months[1]}"
+else:
+    seasonality_insight = "N/A"
 
+# Display updated insights
+st.markdown("---\n### 🔍 Summary Insights")
+st.info(f"""
+**Street Hotspot:** {top_street} appears to have the highest reported crimes.
+
+**Seasonality:** {seasonality_insight} show visible spikes. Investigate why.
+
+**Type Dominance:** '{top_crime_type}' is currently the most reported crime type.
+""")
