@@ -138,7 +138,6 @@ if selected_streets:
     filtered_df = filtered_df[filtered_df['Street'].isin(selected_streets)]
 
 
-
 # Title
 st.title("🚔 Cleveland Police Crime Dashboard")
 st.markdown("Understand crime trends, hotspots, and outcomes across Cleveland.")
@@ -169,7 +168,7 @@ if nav == 'Overview':
         </div>
     """, unsafe_allow_html=True)
 
-     with col_b:
+    with col_b:
         top_street = filtered_df['Street'].mode().iloc[0] if not filtered_df['Street'].isna().all() else "N/A"
         st.markdown(f"""
         <div style="{card_style}">
