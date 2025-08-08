@@ -137,7 +137,7 @@ if nav == 'Overview':
     border-radius:8px;
     padding:1rem;
     text-align:center;
-    height:150px;  # Changed from 130px
+    height:130px;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -149,7 +149,7 @@ if nav == 'Overview':
         st.markdown(f"""
         <div style="{card_style}">
             <h6>Total Crimes</h6>
-            <h5 style="color:#004085;">{len(filtered_df):,}</h5>
+            <p style="color:#004085;">{len(filtered_df):,}</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -167,7 +167,7 @@ if nav == 'Overview':
         st.markdown(f"""
         <div style="{card_style}">
             <h6>Most Frequent Crime Type</h6>
-            <h5 style="color:#004085;">{top_crime}</h5>
+            <p style="color:#004085;">{top_crime}</p>
         </div>
     """, unsafe_allow_html=True)
 
