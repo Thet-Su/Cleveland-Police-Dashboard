@@ -4,3 +4,4 @@ plotly
 seaborn
 streamlit
 prophet
+openpyxl
