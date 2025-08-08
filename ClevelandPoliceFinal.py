@@ -39,7 +39,6 @@ df_clean = df_clean.drop(columns=columns_to_drop)
 # 5. Create 'Street' column by removing "On or Near" from 'Location'
 df_clean['Street'] = df_clean['Location'].str.replace('On or near', '').str.strip()
 
-
 # 6. Extract Month Name and Year
 df_clean['Month_Name'] = df_clean['Month'].dt.strftime('%B')
 df_clean['Year'] = df_clean['Month'].dt.year
@@ -121,6 +120,21 @@ if selected_outcomes:
 if selected_streets:
     filtered_df = filtered_df[filtered_df['Street'].isin(selected_streets)]
 
+# Filtered Data
+filtered_df = df_clean[
+    (df_clean['Month'] >= pd.to_datetime(selected_dates[0])) &
+    (df_clean['Month'] <= pd.to_datetime(selected_dates[1]))
+]
+
+if selected_crime_types:
+    filtered_df = filtered_df[filtered_df['Crime type'].isin(selected_crime_types)]
+
+if selected_outcomes:
+    filtered_df = filtered_df[filtered_df['Last outcome category'].isin(selected_outcomes)]
+
+if selected_streets:
+    filtered_df = filtered_df[filtered_df['Street'].isin(selected_streets)]
+
 
 
 # Title
@@ -156,11 +170,11 @@ if nav == 'Overview':
     with col_b:
         top_street = filtered_df['Street'].mode().iloc[0] if not filtered_df['Street'].isna().all() else "N/A"
         st.markdown(f"""
-        <div style="{card_style}">
-            <h6>Most Frequent Crime Spot</h6>
-            <p style="color:#004085;">{top_street}</p>
-        </div>
-    """, unsafe_allow_html=True)
+            <div style="{card_style}">
+                <h6>Most Frequent Crime Spot</h6>
+                <h5 style="color:#004085;">{top_street}</h5>
+            </div>
+        """, unsafe_allow_html=True)
 
     with col_c:
         top_crime = filtered_df['Crime type'].mode().iloc[0] if not filtered_df['Crime type'].isna().all() else "N/A"
