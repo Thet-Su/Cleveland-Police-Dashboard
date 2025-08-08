@@ -218,35 +218,39 @@ elif nav == 'Locations':
     if selected_streets:
             loc_df = loc_df[loc_df['Street'].isin(selected_streets)]
 
-    col1, col2 = st.columns(2)
-    with col1:
-        street_counts = loc_df['Street'].value_counts().head(20).reset_index()
-        street_counts.columns = ['Street', 'Count']
-        fig2, ax2 = plt.subplots(figsize=(6, 8))
-        sns.barplot(data=street_counts, y='Count', x='Street', palette='Blues_r', ax=ax2)
-        ax2.set_title("Top 20 Streets by Crime Count")
-        ax2.tick_params(axis='x', rotation=45)
-        st.pyplot(fig2)
-        
+    # --- Top 20 Streets by Crime ---
+    st.subheader("🏘️ Top 20 Streets by Crime Count")
+    street_counts = loc_df['Street'].value_counts().head(20).reset_index()
+    street_counts.columns = ['Street', 'Count']
 
-    with col2:
-        st.caption("🧭 Tip: Click on a legend item to toggle a crime type on/off.")
-        map_df = loc_df.dropna(subset=['Latitude', 'Longitude'])
-        if not map_df.empty:
-            fig_map = px.scatter_mapbox(
-                map_df,
-                lat="Latitude",
-                lon="Longitude",
-                color="Crime type",
-                hover_data=["LSOA name", "Street", "Last outcome category"],
-                zoom=10,
-                height=650,
-                mapbox_style="carto-positron"
-                )
-            st.plotly_chart(fig_map)
-        else:
-                    st.warning("No geolocation data available for selected filter.")
+    fig2, ax2 = plt.subplots(figsize=(12, 6))
+    sns.barplot(data=street_counts, x='Street', y='Count', palette='Blues_r', ax=ax2)
+    ax2.set_title("Top 20 Streets by Crime Count")
+    ax2.set_ylabel("Crime Count")
+    ax2.set_xlabel("Street")
+    ax2.tick_params(axis='x', rotation=90)
+    st.pyplot(fig2)
 
+    # --- Map ---
+    st.subheader("🗺️ Crime Map by Type")
+    st.caption("🧭 Tip: Click on a legend item to toggle a crime type on/off.")
+
+    map_df = loc_df.dropna(subset=['Latitude', 'Longitude'])
+
+    if not map_df.empty:
+        fig_map = px.scatter_mapbox(
+            map_df,
+            lat="Latitude",
+            lon="Longitude",
+            color="Crime type",
+            hover_data=["LSOA name", "Street", "Last outcome category"],
+            zoom=10,
+            height=650,
+            mapbox_style="carto-positron"
+        )
+        st.plotly_chart(fig_map, use_container_width=True)
+    else:
+        st.warning("No geolocation data available for selected filter.")
 
 # ========== SECTION: CORRELATION ==========
 elif nav == 'Correlation':
