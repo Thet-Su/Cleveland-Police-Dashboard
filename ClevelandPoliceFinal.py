@@ -38,6 +38,8 @@ df_clean = df_clean.drop(columns=columns_to_drop)
 
 # 5. Create 'Street' column by removing "On or Near" from 'Location'
 df_clean['Street'] = df_clean['Location'].str.replace('On or near', '').str.strip()
+df_clean['Street'].replace('', pd.NA, inplace=True)
+df_clean = df_clean.dropna(subset=['Street'])
 
 # 6. Extract Month Name and Year
 df_clean['Month_Name'] = df_clean['Month'].dt.strftime('%B')
@@ -163,30 +165,25 @@ if nav == 'Overview':
         st.markdown(f"""
         <div style="{card_style}">
             <h6>Total Crimes</h6>
-            <p style="color:#004085;">{len(filtered_df):,}</p>
+            <h5 style="color:#004085;">{len(filtered_df):,}</h5>
         </div>
     """, unsafe_allow_html=True)
 
-    with col_b:
-        if not filtered_df.empty and filtered_df['Street'].dropna().size > 0:
-            top_street_mode = filtered_df['Street'].mode()
-            top_street = top_street_mode.iloc[0] if not top_street_mode.empty else "N/A"
-        else:
-            top_street = "N/A"
-
+     with col_b:
+        top_street = filtered_df['Street'].mode().iloc[0] if not filtered_df['Street'].isna().all() else "N/A"
         st.markdown(f"""
         <div style="{card_style}">
             <h6>Most Frequent Crime Spot</h6>
-            <div style="color:#004085; font-size: 16px; font-weight: 600; word-wrap: break-word;">{top_street}</div>
+            <h5 style="color:#004085;">{top_street}</h5>
         </div>
-        """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
     with col_c:
         top_crime = filtered_df['Crime type'].mode().iloc[0] if not filtered_df['Crime type'].isna().all() else "N/A"
         st.markdown(f"""
         <div style="{card_style}">
             <h6>Most Frequent Crime Type</h6>
-            <p style="color:#004085;">{top_crime}</p>
+            <h5 style="color:#004085;">{top_crime}</h5>
         </div>
     """, unsafe_allow_html=True)
 
