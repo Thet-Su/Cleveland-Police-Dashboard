@@ -137,7 +137,7 @@ if nav == 'Overview':
     border-radius:8px;
     padding:1rem;
     text-align:center;
-    height:130px;
+    height:150px;  # Changed from 130px
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -154,15 +154,11 @@ if nav == 'Overview':
     """, unsafe_allow_html=True)
 
     with col_b:
-        top_street_mode = filtered_df['Street'].mode()
-        if not top_street_mode.empty:
-            top_street = top_street_mode.iloc[0]
-        else:
-            top_street = "N/A"
+        top_street = filtered_df['Street'].mode().iloc[0] if not filtered_df['Street'].isna().all() else "N/A"
         st.markdown(f"""
         <div style="{card_style}">
-        <h6>Most Frequent Crime Spot</h6>
-        <h6 style="color:#004085;">{top_street}</h6>
+            <h6>Most Frequent Crime Spot</h6>
+            <p style="color:#004085;">{top_street}</p>
         </div>
     """, unsafe_allow_html=True)
 
