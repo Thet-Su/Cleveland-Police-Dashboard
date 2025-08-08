@@ -12,7 +12,7 @@ import streamlit.components.v1 as components
 #----------------
 
 # Load the saved file, renamed and converted to xlsx 
-df_clean = pd.read_csv('cleveland_final.csv')
+df_clean = pd.read_excel('cleveland_finalclean.xlsx')
 
 #See the data type of each column in your DataFrame
 print(df_clean.dtypes)
