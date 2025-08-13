@@ -83,7 +83,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-nav_options = ['Overview', 'Locations', 'Correlation', 'Trends', 'Forecast', 'Insights']
+nav_options = ['📊 Overview', '📍Locations', '📈 Trends', '🔮 Forecast']
 nav = st.radio(
     "", nav_options, horizontal=True, label_visibility="collapsed"
 )
@@ -158,7 +158,7 @@ if nav == 'Overview':
     justify-content:center;
 """
 
-    col_a, col_b, col_c = st.columns(3)
+    col_a, col_b, col_c, col_d = st.columns(4)
 
     with col_a:
         st.markdown(f"""
@@ -185,27 +185,53 @@ if nav == 'Overview':
             <h5 style="color:#004085;">{top_crime}</h5>
         </div>
     """, unsafe_allow_html=True)
+    
+    with col_d:
+        unique_months = filtered_df['Month'].dt.to_period('M').nunique()
+        total_crimes = len(filtered_df)
+
+    # Calculate average crimes per month, handling potential division by zero
+        if unique_months > 0:
+            avg_crimes_per_month = total_crimes / unique_months
+        else:
+            avg_crimes_per_month = 0
+            
+        # Round the average to the nearest whole number
+        rounded_avg = int(round(avg_crimes_per_month, 0))
+
+        st.markdown(f"""
+                    <div style="{card_style}">
+                    <h6>Avg. Crimes/Month</h6>
+                    <h5 style="color:#004085;">{avg_crimes_per_month:,.1f}</h5>
+                    </div>
+                    """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
+    crime_type_counts = filtered_df['Crime type'].value_counts().reset_index()
+    crime_type_counts.columns = ['Crime Type', 'Count']
 
     with col1:
-        fig1, ax1 = plt.subplots(figsize=(10, 5))
-        sns.countplot(
-            data=filtered_df,
-            y='Crime type',
-            order=filtered_df['Crime type'].value_counts().index,
-            palette='Blues_r',
-            ax=ax1
-            )
-        ax1.set_title("Crime Count by Type")
-        st.pyplot(fig1)
+        fig1 = px.bar(
+            crime_type_counts,
+            x='Count',
+            y='Crime Type',
+            title="Crime Count by Type",
+            orientation='h', # Create a horizontal bar chart
+            color_discrete_sequence=px.colors.sequential.Blues_r,
+            )   
+        fig1.update_layout(yaxis={'categoryorder':'total ascending'})
+        st.plotly_chart(fig1)
 
     with col2:
-        fig_year, ax_year = plt.subplots(figsize=(10, 4))
-        filtered_df.groupby('Year').size().plot(kind='bar', color='steelblue', ax=ax_year)
-        ax_year.set_title("Crime Count by Year")
-        ax_year.set_ylabel("Number of Crimes")
-        st.pyplot(fig_year)
+        year_counts = filtered_df.groupby('Year').size().reset_index(name='Count')
+        fig_year = px.bar(
+            year_counts,
+            x='Year',
+            y='Count',
+            title="Crime Count by Year",
+            color_discrete_sequence=px.colors.sequential.Blues_r,
+            )
+        st.plotly_chart(fig_year)
 
 
 # ========== SECTION: LOCATIONS ==========
@@ -222,14 +248,17 @@ elif nav == 'Locations':
     st.subheader("🏘️ Top 20 Streets by Crime Count")
     street_counts = loc_df['Street'].value_counts().head(20).reset_index()
     street_counts.columns = ['Street', 'Count']
-
-    fig2, ax2 = plt.subplots(figsize=(12, 6))
-    sns.barplot(data=street_counts, x='Street', y='Count', palette='Blues_r', ax=ax2)
-    ax2.set_title("Top 20 Streets by Crime Count")
-    ax2.set_ylabel("Crime Count")
-    ax2.set_xlabel("Street")
-    ax2.tick_params(axis='x', rotation=90)
-    st.pyplot(fig2)
+    
+    fig2 = px.bar(
+    street_counts,
+    x='Street',
+    y='Count',
+    title="Top 20 Streets by Crime Count",
+    color_discrete_sequence=px.colors.sequential.Blues_r,
+    height= 700,
+    )
+    fig2.update_layout(xaxis_tickangle=-90) # Rotates x-axis labels
+    st.plotly_chart(fig2)
 
     # --- Map ---
     st.subheader("🗺️ Crime Map by Type")
@@ -252,55 +281,41 @@ elif nav == 'Locations':
     else:
         st.warning("No geolocation data available for selected filter.")
 
-# ========== SECTION: CORRELATION ==========
-elif nav == 'Correlation':
-    st.header("🧮 Crime Type Correlation Matrix")
-    st.markdown("**Question:** What types of crime dominate in Cleveland? How has it changed annually?")
-
-    pivot_corr = filtered_df.groupby(['Month', 'Crime type']).size().unstack(fill_value=0)
-    corr_matrix = pivot_corr.corr()
-    fig_corr, ax_corr = plt.subplots(figsize=(12, 6))
-    sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", ax=ax_corr)
-    ax_corr.set_title("Correlation Between Crime Types Over Time")
-    st.pyplot(fig_corr)
-
-# Additional sections like Trends, Outcomes, etc. continue below...
-
 
 # ========== SECTION: CTRENDS & HEATMAP ==========
 elif nav == 'Trends':
     st.header("📈 Crime Trends and Heatmap")
-    col_trend, col_heat = st.columns(2)
+    st.subheader("Monthly Crime Trend")
+    monthly_trend = filtered_df.groupby(['Month', 'Crime type']).size().reset_index(name='Crime Count')
+    pivot = monthly_trend.pivot(index='Month', columns='Crime type', values='Crime Count')
 
-    with col_trend:
-        st.subheader("Monthly Crime Trend")
-        monthly_trend = filtered_df.groupby(['Month', 'Crime type']).size().reset_index(name='Crime Count')
-        pivot = monthly_trend.pivot(index='Month', columns='Crime type', values='Crime Count')
+    fig_line = px.line(
+            monthly_trend,
+            x='Month',
+            y='Crime Count',
+            color='Crime type',
+            labels={'Crime Count': 'Crime Count', 'Month': 'Date'}
+        )
+        
+        # Display the interactive Plotly chart
+    st.plotly_chart(fig_line, use_container_width=True)
 
-        fig_line, ax_line = plt.subplots(figsize=(10, 5))
-        pivot.plot(ax=ax_line)
-        ax_line.set_title("Detailed Crime Trend")
-        ax_line.set_ylabel("Crime Count")
-        ax_line.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
-        fig_line.tight_layout()
-        st.pyplot(fig_line)
-
-    with col_heat:
-        st.subheader("Monthly Crime Heatmap")
-        heat_df = filtered_df.copy()
-        heat_df['Month'] = heat_df['Month'].dt.strftime('%B')
-        month_order = ['January', 'February', 'March', 'April', 'May', 'June',
+    st.subheader("Monthly Crime Heatmap")
+    heat_df = filtered_df.copy()
+    heat_df['Month'] = heat_df['Month'].dt.strftime('%B')
+    month_order = ['January', 'February', 'March', 'April', 'May', 'June',
                    'July', 'August', 'September', 'October', 'November', 'December']
-        month_year = heat_df.groupby(['Year', 'Month_Name'], observed=False).size().unstack().T
-        month_year = month_year.reindex(month_order)
-        fig_heat, ax_heat = plt.subplots(figsize=(10, 5))
-        sns.heatmap(month_year, annot=True, fmt=".0f", cmap='YlOrRd', ax=ax_heat)
-        ax_heat.set_title("Monthly Crime Volume")
-        st.pyplot(fig_heat)
+    month_year = heat_df.groupby(['Year', 'Month_Name'], observed=False).size().unstack().T
+    month_year = month_year.reindex(month_order)
+    fig_heat, ax_heat = plt.subplots(figsize=(10, 5))
+    sns.heatmap(month_year, annot=True, fmt=".0f", cmap='YlOrRd', ax=ax_heat)
+    ax_heat.set_title("Monthly Crime Volume")
+    st.pyplot(fig_heat)
+        
 
 # ========== SECTION: CRIME FORECAST ==========
 elif nav == 'Forecast':
-    st.header("Crime Forecast")
+    st.header("🔮 Crime Forecast")
 
     try:
         from prophet import Prophet
@@ -331,39 +346,4 @@ elif nav == 'Forecast':
     except Exception as e:
         st.error(f"An error occurred during forecasting: {e}")
     
-    # ========== INSIGHTS ==========
 
-if not filtered_df.empty and filtered_df['Street'].dropna().size > 0:
-    street_counts = filtered_df['Street'].value_counts()
-    top_street = street_counts.idxmax()
-else:
-    top_street = "N/A"
-
-# Top Crime Type
-if not filtered_df.empty and filtered_df['Crime type'].dropna().size > 0:
-    crime_counts = filtered_df['Crime type'].value_counts()
-    top_crime_type = crime_counts.idxmax()
-else:
-    top_crime_type = "N/A"
-
-# Seasonality
-if not filtered_df.empty:
-    seasonality_df = filtered_df.copy()
-    seasonality_df['Month_Name'] = seasonality_df['Month'].dt.strftime('%B')
-    month_order = ['January', 'February', 'March', 'April', 'May', 'June',
-                   'July', 'August', 'September', 'October', 'November', 'December']
-    seasonal_counts = seasonality_df['Month_Name'].value_counts().reindex(month_order).dropna()
-    top_months = seasonal_counts.nlargest(2).index.tolist()
-    seasonality_insight = f"{top_months[0]} and {top_months[1]}"
-else:
-    seasonality_insight = "N/A"
-
-# Display updated insights
-st.markdown("---\n### 🔍 Summary Insights")
-st.info(f"""
-**Street Hotspot:** {top_street} appears to have the highest reported crimes.
-
-**Seasonality:** {seasonality_insight} show visible spikes. Investigate why.
-
-**Type Dominance:** '{top_crime_type}' is currently the most reported crime type.
-""")
