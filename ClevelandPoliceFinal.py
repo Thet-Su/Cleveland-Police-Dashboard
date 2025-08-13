@@ -196,13 +196,15 @@ if nav == '📊 Overview':
         else:
             avg_crimes_per_month = 0
             
-        rounded_avg = int(round(avg_crimes_per_month, 0))
+        # Round the average to the nearest whole number and convert to an integer
+        rounded_avg = int(round(avg_crimes_per_month))
+
         st.markdown(f"""
-                    <div style="{card_style}">
-                    <h6>Avg. Crimes/Month</h6>
-                    <h5 style="color:#004085;">{rounded_avg:,}</h5>
-                    </div>
-                    """, unsafe_allow_html=True)
+        <div style="{card_style}">
+            <h6>Avg. Crimes/Month</h6>
+            <h5 style="color:#004085;">{rounded_avg:,}</h5>
+        </div>
+        """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     crime_type_counts = filtered_df['Crime type'].value_counts().reset_index()
