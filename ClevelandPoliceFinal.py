@@ -202,7 +202,7 @@ if nav == '📊 Overview':
         st.markdown(f"""
                     <div style="{card_style}">
                     <h6>Avg. Crimes/Month</h6>
-                    <h5 style="color:#004085;">{avg_crimes_per_month:,.1f}</h5>
+                    <h5 style="color:#004085;">{rounded_avg:,}</h5>
                     </div>
                     """, unsafe_allow_html=True)
 
