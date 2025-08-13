@@ -196,9 +196,7 @@ if nav == '📊 Overview':
         else:
             avg_crimes_per_month = 0
             
-        # Round the average to the nearest whole number
         rounded_avg = int(round(avg_crimes_per_month, 0))
-
         st.markdown(f"""
                     <div style="{card_style}">
                     <h6>Avg. Crimes/Month</h6>
