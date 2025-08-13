@@ -231,6 +231,7 @@ if nav == '📊 Overview':
             title="Crime Count by Year",
             color_discrete_sequence=px.colors.sequential.Blues_r,
             )
+        fig_year.update_xaxes(type='category')
         st.plotly_chart(fig_year)
 
 
