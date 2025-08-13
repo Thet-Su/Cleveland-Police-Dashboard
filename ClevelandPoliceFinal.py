@@ -142,7 +142,7 @@ if selected_streets:
 st.title("🚔 Cleveland Police Crime Dashboard")
 st.markdown("Understand crime trends, hotspots, and outcomes across Cleveland.")
 
-if nav == 'Overview':
+if nav == '📊 Overview':
 
 # ========== SECTION: OVERVIEW ==========
     st.header("📊 Crime Overview")
@@ -236,7 +236,7 @@ if nav == 'Overview':
 
 # ========== SECTION: LOCATIONS ==========
 
-elif nav == 'Locations':
+elif nav == '📍Locations':
 
     st.header("📍 Crime by Street and Map")
     st.markdown("**Explore:** Are some streets repeatedly hotspots for crime?")
@@ -283,7 +283,7 @@ elif nav == 'Locations':
 
 
 # ========== SECTION: CTRENDS & HEATMAP ==========
-elif nav == 'Trends':
+elif nav == '📈 Trends':
     st.header("📈 Crime Trends and Heatmap")
     st.subheader("Monthly Crime Trend")
     monthly_trend = filtered_df.groupby(['Month', 'Crime type']).size().reset_index(name='Crime Count')
@@ -314,7 +314,7 @@ elif nav == 'Trends':
         
 
 # ========== SECTION: CRIME FORECAST ==========
-elif nav == 'Forecast':
+elif nav == '🔮 Forecast':
     st.header("🔮 Crime Forecast")
 
     try:
