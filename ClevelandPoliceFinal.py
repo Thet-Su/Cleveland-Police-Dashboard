@@ -138,13 +138,14 @@ if selected_streets:
     filtered_df = filtered_df[filtered_df['Street'].isin(selected_streets)]
 
 
-# Title
-st.title("🚔 Cleveland Police Crime Dashboard")
-st.markdown("Understand crime trends, hotspots, and outcomes across Cleveland.")
 
 if nav == '📊 Overview':
 
 # ========== SECTION: OVERVIEW ==========
+    # Title
+st.title("🚔 Cleveland Police Crime Dashboard")
+st.markdown("Understand crime trends, hotspots, and outcomes across Cleveland.")
+
     st.header("📊 Crime Overview")
 
     card_style = """
