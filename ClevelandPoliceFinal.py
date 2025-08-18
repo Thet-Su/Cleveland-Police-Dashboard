@@ -83,7 +83,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-nav_options = ['📊 Overview', '📍Locations', '📈 Trends', '🔮 Forecast']
+nav_options = ['📊 Overview', '📍Crime Hotspots', '📈 Temporal Trends', '🔮 Crime Forecast']
 nav = st.radio(
     "", nav_options, horizontal=True, label_visibility="collapsed"
 )
@@ -240,7 +240,7 @@ if nav == '📊 Overview':
 
 # ========== SECTION: LOCATIONS ==========
 
-elif nav == '📍Locations':
+elif nav == '📍Crime Hotspots':
 
     st.header("📍 Crime by Street and Map")
  
@@ -289,7 +289,7 @@ elif nav == '📍Locations':
 
 
 # ========== SECTION: CTRENDS & HEATMAP ==========
-elif nav == '📈 Trends':
+elif nav == '📈 Temporal Trends':
     st.header("📈 Crime Trends and Heatmap")
     st.subheader("Monthly Crime Trend")
     st.markdown("The line chart shows how crime incidents fluctuate over time, revealing seasonal peaks (e.g. higher crime in warmer months such as May) and patterns. This temporal view supports planning for seasonal policing and community awareness campaigns.")
@@ -324,7 +324,7 @@ elif nav == '📈 Trends':
         
 
 # ========== SECTION: CRIME FORECAST ==========
-elif nav == '🔮 Forecast':
+elif nav == '🔮 Crime Forecast':
     st.header("🔮 Crime Forecast")
     st.markdown("This time-series forecast projects crime levels for the next six months. It anticipates a short-term peak in May, followed by a decline through summer and a modest recovery in autumn. The forecast adds predictive value to the dashboard, moving beyond retrospective analysis.")
 
