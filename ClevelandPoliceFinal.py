@@ -241,13 +241,14 @@ if nav == '📊 Overview':
 elif nav == '📍Locations':
 
     st.header("📍 Crime by Street and Map")
-    st.markdown("**Explore:** Are some streets repeatedly hotspots for crime?")
+ 
     loc_df = filtered_df.copy()
     if selected_streets:
             loc_df = loc_df[loc_df['Street'].isin(selected_streets)]
 
     # --- Top 20 Streets by Crime ---
     st.subheader("🏘️ Top 20 Streets by Crime Count")
+    st.markdown("This ranking chart lists the most affected areas/streets, which consistently appear as crime hotspots. It pinpoints areas that may benefit from targeted policing or neighbourhood-level engagement.")
     street_counts = loc_df['Street'].value_counts().head(20).reset_index()
     street_counts.columns = ['Street', 'Count']
     
@@ -264,6 +265,8 @@ elif nav == '📍Locations':
 
     # --- Map ---
     st.subheader("🗺️ Crime Map by Type")
+    st.markdown("The geographic plot displays incident locations across Cleveland, with hoverable details for individual crimes. By visualising hotspots spatially, the map gives an intuitive sense of how crime is distributed and whether it clusters in particular neighbourhoods.")
+
     st.caption("🧭 Tip: Click on a legend item to toggle a crime type on/off.")
 
     map_df = loc_df.dropna(subset=['Latitude', 'Longitude'])
@@ -288,6 +291,8 @@ elif nav == '📍Locations':
 elif nav == '📈 Trends':
     st.header("📈 Crime Trends and Heatmap")
     st.subheader("Monthly Crime Trend")
+    st.markdown("The line chart shows how crime incidents fluctuate over time, revealing seasonal peaks (e.g. higher crime in warmer months such as May) and patterns. This temporal view supports planning for seasonal policing and community awareness campaigns.")
+
     monthly_trend = filtered_df.groupby(['Month', 'Crime type']).size().reset_index(name='Crime Count')
     pivot = monthly_trend.pivot(index='Month', columns='Crime type', values='Crime Count')
 
@@ -303,6 +308,8 @@ elif nav == '📈 Trends':
     st.plotly_chart(fig_line, use_container_width=True)
 
     st.subheader("Monthly Crime Heatmap")
+    st.markdown("This two-dimensional heatmap plots incidents by month and year, providing a compact overview of crime intensity over time. It makes seasonal and yearly fluctuations easier to detect at a glance, highlighting months with unusually high or low crime volumes.")
+
     heat_df = filtered_df.copy()
     heat_df['Month'] = heat_df['Month'].dt.strftime('%B')
     month_order = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -318,6 +325,8 @@ elif nav == '📈 Trends':
 # ========== SECTION: CRIME FORECAST ==========
 elif nav == '🔮 Forecast':
     st.header("🔮 Crime Forecast")
+    st.markdown("This time-series forecast projects crime levels for the next six months. The forecast adds predictive value to the dashboard, moving beyond retrospective analysis.")
+
 
     try:
         from prophet import Prophet
