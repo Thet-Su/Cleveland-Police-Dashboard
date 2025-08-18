@@ -256,7 +256,6 @@ elif nav == '📍Locations':
     street_counts,
     x='Street',
     y='Count',
-    title="Top 20 Streets by Crime Count",
     color_discrete_sequence=px.colors.sequential.Blues_r,
     height= 700,
     )
@@ -325,7 +324,7 @@ elif nav == '📈 Trends':
 # ========== SECTION: CRIME FORECAST ==========
 elif nav == '🔮 Forecast':
     st.header("🔮 Crime Forecast")
-    st.markdown("This time-series forecast projects crime levels for the next six months. The forecast adds predictive value to the dashboard, moving beyond retrospective analysis.")
+    st.markdown("This time-series forecast projects crime levels for the next six months. It anticipates a short-term peak in May, followed by a decline through summer and a modest recovery in autumn. The forecast adds predictive value to the dashboard, moving beyond retrospective analysis.")
 
 
     try:
