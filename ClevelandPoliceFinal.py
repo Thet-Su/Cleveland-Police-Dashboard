@@ -143,8 +143,8 @@ if nav == '📊 Overview':
 
 # ========== SECTION: OVERVIEW ==========
     # Title
-st.title("🚔 Cleveland Police Crime Dashboard")
-st.markdown("Understand crime trends, hotspots, and outcomes across Cleveland.")
+    st.title("🚔 Cleveland Police Crime Dashboard")
+    st.markdown("Understand crime trends, hotspots, and outcomes across Cleveland.")
 
     st.header("📊 Crime Overview")
 
