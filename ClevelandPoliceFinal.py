@@ -11,7 +11,7 @@ import streamlit.components.v1 as components
 # Data Loading
 #----------------
 
-# Load the saved file, renamed and converted to xlsx 
+# Load the consolidated file
 df_clean = pd.read_csv('cleveland_final.csv')
 
 #See the data type of each column in your DataFrame
