@@ -147,7 +147,7 @@ if nav == '📊 Overview':
     st.markdown("Understand crime trends, hotspots, and outcomes across Cleveland.")
 
     st.header("📊 Crime Overview")
-    st.markdown("This section provides a snapshot of Cleveland’s crime landscape, summarising total crimes, average monthly crime levels, the most common crime locations, and the dominant offence types. The accompanying charts show how crime is distributed across categories and how overall volumes have shifted year by year.")
+    st.markdown("This section summarizes Cleveland’s crime trends, including total and average monthly crimes, common locations, dominant offence types, and year-by-year changes, illustrated with supporting charts.")
 
 
     card_style = """
