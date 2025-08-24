@@ -104,7 +104,7 @@ with st.sidebar:
     )
     filtered_df = df_clean[
     (df_clean['Month'] >= selected_dates[0]) &
-    (df_clean['Month'] <= selected_dates[1])
+    (df_clean['Month'] <= selected_dates[1])]
 
     # Other Filters
     available_crime_types = sorted(df_clean['Crime type'].dropna().unique())
