@@ -96,7 +96,15 @@ with st.sidebar:
 
   # Date Range Filter
     min_date, max_date = df_clean['Month'].min(), df_clean['Month'].max()
-    selected_dates = st.date_input("Date Range", [min_date, max_date], min_value=min_date, max_value=max_date)
+    selected_dates = st.date_input(
+    "Date Range",
+    [min_date, max_date],
+    min_value=min_date,
+    max_value=max_date
+    )
+    filtered_df = df_clean[
+    (df_clean['Month'] >= selected_dates[0]) &
+    (df_clean['Month'] <= selected_dates[1])
 
     # Other Filters
     available_crime_types = sorted(df_clean['Crime type'].dropna().unique())
