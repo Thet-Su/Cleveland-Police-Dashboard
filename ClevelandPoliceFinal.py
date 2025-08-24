@@ -249,7 +249,7 @@ elif nav == '📍Crime Hotspots':
 
     # --- Top 20 Streets by Crime ---
     st.subheader("🏘️ Top 20 Streets by Crime Count")
-    st.markdown("This ranking chart lists the most affected areas/streets, which consistently appear as crime hotspots. It pinpoints areas that may benefit from targeted policing or neighbourhood-level engagement.")
+    st.markdown("This ranking chart lists the most affected areas/streets, which consistently appear as crime hotspots.")
     street_counts = loc_df['Street'].value_counts().head(20).reset_index()
     street_counts.columns = ['Street', 'Count']
     
@@ -265,7 +265,7 @@ elif nav == '📍Crime Hotspots':
 
     # --- Map ---
     st.subheader("🗺️ Crime Map by Type")
-    st.markdown("The geographic plot displays incident locations across Cleveland, with hoverable details for individual crimes. By visualising hotspots spatially, the map gives an intuitive sense of how crime is distributed and whether it clusters in particular neighbourhoods.")
+    st.markdown("The geographic plot displays incident locations across Cleveland, with hoverable details for individual crimes.")
 
     st.caption("🧭 Tip: Click on a legend item to toggle a crime type on/off.")
 
@@ -291,7 +291,7 @@ elif nav == '📍Crime Hotspots':
 elif nav == '📈 Temporal Trends':
     st.header("📈 Crime Trends and Heatmap")
     st.subheader("Monthly Crime Trend")
-    st.markdown("The line chart shows how crime incidents fluctuate over time, revealing seasonal peaks (e.g. higher crime in warmer months such as May) and patterns. This temporal view supports planning for seasonal policing and community awareness campaigns.")
+    st.markdown("The line chart shows how crime incidents fluctuate over time, revealing seasonal peaks and patterns.")
 
     monthly_trend = filtered_df.groupby(['Month', 'Crime type']).size().reset_index(name='Crime Count')
     pivot = monthly_trend.pivot(index='Month', columns='Crime type', values='Crime Count')
@@ -308,7 +308,7 @@ elif nav == '📈 Temporal Trends':
     st.plotly_chart(fig_line, use_container_width=True)
 
     st.subheader("Monthly Crime Heatmap")
-    st.markdown("This two-dimensional heatmap plots incidents by month and year, providing a compact overview of crime intensity over time. It makes seasonal and yearly fluctuations easier to detect at a glance, highlighting months with unusually high or low crime volumes.")
+    st.markdown("This two-dimensional heatmap plots incidents by month and year, providing a compact overview of crime intensity over time.")
 
     heat_df = filtered_df.copy()
     heat_df['Month'] = heat_df['Month'].dt.strftime('%B')
@@ -325,7 +325,7 @@ elif nav == '📈 Temporal Trends':
 # ========== SECTION: CRIME FORECAST ==========
 elif nav == '🔮 Crime Forecast':
     st.header("🔮 Crime Forecast")
-    st.markdown("This time-series forecast projects crime levels for the next six months. It anticipates a short-term peak in May, followed by a decline through summer and a modest recovery in autumn. The forecast adds predictive value to the dashboard, moving beyond retrospective analysis.")
+    st.markdown("This time-series forecast projects crime levels for the next six months.")
 
 
     try:
